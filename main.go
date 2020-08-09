@@ -20,36 +20,70 @@ import (
 //constants
 const (
 	baseURL string = "https://dev.to/api/articles?"
-	Username string = "username=nduti"
+	Username string = "username="
 )
+
+var client = &http.Client{}
 
 func main(){
 
-	//instantiate Client
-	client := &http.Client{}
-
-	//formulate full URL
-	url := baseURL+Username
-
-	//Make a request
-	req,err := http.NewRequest("GET",url,nil)
+	//Call the get data function
+	data,err := GetUserNameAndIndent("nduti")
 	Check(err)
 
-	//get response
+	var extract []Article
+
+	//unmarshal to extract
+	err = json.Unmarshal([]byte(data),&extract)
+	Check(err)
+
+	//traverse the all the responses given
+	for k,data := range extract{
+		fmt.Printf("(%v) %v \n %v",k+1,data.Title,data.Description)
+		fmt.Println("")
+	}
+
+}
+
+//Get username
+func GetUserName(name string) (interface{},error){
+	//join to form a FQDN
+	URL := baseURL+Username+name
+
+	//make request
+	req,err := http.NewRequest("GET",URL,nil)
+	Check(err)
+
+	//Get response
 	resp,err := client.Do(req)
 	Check(err)
 
-	//close connection
+	//Close Conn stream
 	defer resp.Body.Close()
 
-	var target interface{}
+	//variable to decode to resp to
+	var result interface{}
 
-	//decode response to target interface
-	json.NewDecoder(resp.Body).Decode(&target)
+	//return Interface that contains json data
+	json.NewDecoder(resp.Body).Decode(&result)
 
-	//display Json
-	fmt.Println(target)
+	return result,nil
 
+
+}
+
+//indented format
+func GetUserNameAndIndent(name string) (string,error) {
+	//Get all user's data
+	dataN,err := GetUserName(name)
+	Check(err)
+
+	//Indent it
+	fullData,err := json.MarshalIndent(dataN,"","   ")
+	Check(err)
+
+	//response
+	return string(fullData),nil
 }
 
 //err handler
@@ -59,9 +93,8 @@ func Check(e error){
 	}
 }
 
-
 // Articles is a list of articles.
-type Articles []struct {
+type Articles struct {
 	TypeOf                 string       `json:"type_of"`
 	ID                     int          `json:"id"`
 	Title                  string       `json:"title"`
@@ -92,8 +125,8 @@ type Article struct {
 	CoverImage             string       `json:"cover_image"`
 	Published              bool         `json:"published"`
 	PublishedAt            time.Time    `json:"published_at"`
-	TagList                string       `json:"tag_list"`
-	Tags                   []string     `json:"tags"`
+	TagList                []string       `json:"tag_list"`
+	Tags                   string     `json:"tags"`
 	Slug                   string       `json:"slug"`
 	Path                   string       `json:"path"`
 	URL                    string       `json:"url"`
