@@ -15,7 +15,7 @@ import(
 
 func main(){
 	//capture title and description from user nduti
-	titles,descriptions,err := devto-api.GetTitles("nduti")
+	titles,descriptions,err := devtoapi.GetTitles("nduti")
 
 	//handle errors
 	if err!=nil{
