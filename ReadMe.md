@@ -3,12 +3,14 @@
 
 * Still under construction but usable.
 
+``` $ go get github.com/edwinnduti/devtoapi```
+
 ```go
 package main
 
 import(
 	"fmt"
-	"github.com/edwinnduti/devto-api"
+	"github.com/edwinnduti/devtoapi"
 )
 
 func main(){
