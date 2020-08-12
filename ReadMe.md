@@ -27,4 +27,4 @@ func main(){
 
 }
 ```
-* just alittle more 🤏
+* just alittle more 
