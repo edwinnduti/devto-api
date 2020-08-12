@@ -6,7 +6,7 @@ Description :
 	 A dev.to consuming API code.
 */
 
-package devapi
+package devto-api
 
 //imports
 import (
