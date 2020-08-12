@@ -1,3 +1,3 @@
-module github.com/edwinnduti/mdevto-api
+module github.com/edwinnduti/devtoapi
 
 go 1.14
