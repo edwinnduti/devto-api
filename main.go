@@ -13,7 +13,6 @@ import (
 	"time"
 	"net/http"
 	"encoding/json"
-	"fmt"
 	"log"
 )
 
