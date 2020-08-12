@@ -6,7 +6,7 @@ Description :
 	 A dev.to consuming API code.
 */
 
-package main
+package devapi
 
 //imports
 import (
@@ -25,25 +25,6 @@ const (
 
 var client = &http.Client{}
 
-func main(){
-
-	//Call the get data function
-	data,err := GetUserNameAndIndent("nduti")
-	Check(err)
-
-	var extract []Article
-
-	//unmarshal to extract
-	err = json.Unmarshal([]byte(data),&extract)
-	Check(err)
-
-	//traverse the all the responses given
-	for k,data := range extract{
-		fmt.Printf("(%v) %v \n %v",k+1,data.Title,data.Description)
-		fmt.Println("")
-	}
-
-}
 
 //Get username
 func GetUserName(name string) (interface{},error){
@@ -84,6 +65,28 @@ func GetUserNameAndIndent(name string) (string,error) {
 
 	//response
 	return string(fullData),nil
+}
+
+//Give titles
+func GetTitles(name string) ([]string,[]string,error) {
+
+	//Call the get data function
+	data,err := GetUserNameAndIndent(name)
+	Check(err)
+
+	var extract []Article
+
+        //unmarshal to extract
+	err = json.Unmarshal([]byte(data),&extract)
+	Check(err)
+
+	var title,description []string
+        //traverse the all the responses given
+	for _,data := range extract{
+		title = append(title,data.Title)
+		description  = append(description,data.Description)
+	}
+	return title,description,nil
 }
 
 //err handler
